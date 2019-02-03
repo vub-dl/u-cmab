@@ -1,0 +1,4 @@
+.ipynb_checkpoints
+*.pyc
+/pylift
+.DS_Store

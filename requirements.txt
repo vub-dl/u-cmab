@@ -1,0 +1,7 @@
+numpy >= 1.13.3
+matplotlib >= 2.1.0
+scikit-learn >= 0.19.1
+scipy >= 1.0.0
+xgboost >= 0.6a2
+pandas
+
