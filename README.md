@@ -7,11 +7,6 @@ Code is split in simulation code, found in the folder `simulation-code` and code
 The required packages are listed in the `requirements.txt` file, with `pylift` as an exception. We use `pylift` to measure against the U-CMAB. In order to properly install `pylift`, we refer to its [git repository](https://github.com/wayfair/pylift) and [documentation](https://pylift.readthedocs.io/en/latest/installation.html).
 
 ## Running the code
-First, make sure this repository is properly cloned on your machine:
-```shell
-clone repo
-cd repo
-```
 All code is provided in Python 3.6.6. Before running any experiments, make sure all dependencies are installed (this could take a few minutes):
 
 ```shell
