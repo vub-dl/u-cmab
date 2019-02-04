@@ -85,16 +85,6 @@ class Fourier:
 
 		return incremental_diff, drift_moments
 			
-	""" def gather_c(self):
-		base = np.arange(self.order + 1)
-		c = np.ndarray(((self.order + 1) ** self.env.dim_count, self.env.dim_count))
-		shift = -1
-		for i in range(len(c)):
-			if not i%(self.order+1):
-				shift += 1             
-			c[i] = [base[i%(self.order+1)], base[(i + shift * 1)%(self.order+1)]] # extension for multiple dims!!
-		return c """
-
 	def gather_c(self):
 		cart_prod = list(itertools.product(np.arange(0, self.order+1), repeat=self.env.dim_count))
 		return [list(elem) for elem in cart_prod]
