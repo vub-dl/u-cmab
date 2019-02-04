@@ -29,6 +29,6 @@ Every figure in the submitted paper corresponds with a notebook, provided at the
 Note that due to the anonymisation process, notebooks are converted to `json`. When copying the notebooks, one can save a file as `ipynb` and open with jupyter notebook.
 
 ---
-[3] Jeroen Berrevoets and Wouter Verbeke. 2019. Causal Simulations for Uplift Modeling. _arXiv preprint arXiv:2560.119_ (2019).
+[3] Jeroen Berrevoets and Wouter Verbeke. 2019. Causal Simulations for Uplift Modeling. _arXiv preprint arXiv:1902.00287_ (2019).
 
 [13] George Konidaris, Sarah Osentoski, and Philip S Thomas. 2011. Value function approximation in reinforcement learning using the Fourier basis.. In _AAAI,_ Vol. 6.7.
