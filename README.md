@@ -26,7 +26,7 @@ After [installation](https://jupyter.readthedocs.io/en/latest/install.html), all
 jupyter notebook
 ```
 Every figure in the submitted paper corresponds with a notebook, provided at the root of this repository. Note that all notebooks are jupyter notebooks, with the exception of one Wolfram Mathematica notebook (`Figure~2.nb`).
-Note that due to the anonymisation process, notebooks are converted to `json`. When copying the notebooks, one can save a file as `ipynb` and open with jupyter notebook.
+Note that due to the anonymisation process, notebooks are converted to `json`. When copying the notebooks, one can save a file as `ipynb` and open with jupyter notebook. For more information, visit [this guide](http://ipython.org/ipython-doc/rel-1.0.0/interactive/nbconvert.html)
 
 ---
 [3] Jeroen Berrevoets and Wouter Verbeke. 2019. Causal Simulations for Uplift Modeling. _arXiv preprint arXiv:1902.00287_ (2019).
