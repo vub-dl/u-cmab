@@ -1,6 +1,4 @@
 # Uplift Modeling is a Contextual Multi-Armed Bandit
-This git repository is complementary to a [SIGKDD 2019](https://www.kdd.org/kdd2019/Calls/view/kdd-2019-call-for-research-papers) submission titled _Uplift Modeling is a Contextual Multi-Armed Bandit_, it includes all code used for experimentation and plotting.
-
 ## Overview
 Code is split in simulation code, found in the folder `simulation-code` and code for the uplifted contextual multi-armed bandit (U-CMAB), found in the folder `u-cmab`. As `simulation-code` is according to [3], we refer to the appropriate [git repository](https://github.com/vub-dl/cs-um) for further documentation. While no codebase is currently available for the Fourier based approximation method [13], `u-cmab/fourier.py` constitutes our interpretation.
 
