@@ -20,10 +20,9 @@ class Static_UM:
 				oracle simulation would apply for C.
 		"""
 
-
 		self.RP_run_history = RP_run_history
 	
-	def run(self, static_dataset_size=6000, total_experiment_count=14000, tau=.2, window=100):
+	def run(self, static_dataset_size=6000, total_experiment_count=14000, tau=.2, window=100, PH_alpha=.005, PH_init_length=200, PH_lambda=.1):
 		if total_experiment_count > len(self.RP_run_history):
 			raise ValueError("Not enough experiments in Run History (RP_run_history) to accommodate {}".format(total_experiment_count))
 
@@ -49,8 +48,8 @@ class Static_UM:
 		
 		# Setup SKL model
 		up = TransformedOutcome((
-			self.RP_run_history.iloc[:,0:self.RP_run_history.shape[0] - 1][0:static_dataset_size], 
-			self.RP_run_history.iloc[:,0:self.RP_run_history.shape[0] - 1][static_dataset_size:total_experiment_count+1]), 
+			self.RP_run_history.iloc[:,0:self.RP_run_history.shape[1] - 3][0:static_dataset_size], 
+			self.RP_run_history.iloc[:,0:self.RP_run_history.shape[1] - 3][static_dataset_size:total_experiment_count+1]), 
 			col_treatment='C', col_outcome='E', 
 			stratify=None, # No stratification as we need to match states in test set with Fourier
 			sklearn_model=RandomForestRegressor)
@@ -71,12 +70,61 @@ class Static_UM:
 			*list(map(lambda p: 1 if p>tau else 0, predictions))]		
 		optimal_decisions = self.RP_run_history['optimal_cause'].tolist()
 
+
+
+
 		difference = np.array([])
 		static_id = np.array([])
+		
+		PH_windowed_avg = 0
+		PH_total_avg = 0		
+		PH_value = np.array([1])
+		PH_total_avgs = np.array([1])
+		PH_windowed_avgs = np.array([1])
+		PH_N = 1
 		for i in range(len(decisions)):
 			difference = np.append(difference, abs(decisions[i] - optimal_decisions[i]))
 			static_id = np.append(static_id, np.average(difference[-window:]))
+			
+			if decisions[i] == 1:
+				PH_total_avg = (1 - 1/(PH_N)) * PH_total_avg + 1/(PH_N) * self.RP_run_history.iloc[i,:][F"E{decisions[i]}"]
+				PH_windowed_avg = (1 - PH_alpha) * PH_windowed_avg + PH_alpha * self.RP_run_history.iloc[i,:][F"E{decisions[i]}"]
+				PH_value = np.append(PH_value, abs(PH_total_avg - PH_windowed_avg))
+
+				PH_windowed_avgs = np.append(PH_windowed_avgs, PH_windowed_avg)
+				PH_total_avgs = np.append(PH_total_avgs, PH_total_avg)
+
+				PH_N += 1
+			else:
+				PH_value = np.append(PH_value, PH_value[-1])
+				PH_windowed_avgs = np.append(PH_windowed_avgs, PH_windowed_avgs[-1])
+				PH_total_avgs = np.append(PH_total_avgs, PH_total_avgs[-1])
+
 
 		# parameters can be consulted using up.rand_search_.best_params_
-		return up, static_id
+		return up, static_id, PH_total_avgs[1:], PH_windowed_avgs[1:], PH_value[1:]
 
+	def train_new_model(self, train_size=6000, start_location=0, tau=.2):
+		# Setup SKL model
+		up = TransformedOutcome((
+			self.RP_run_history.iloc[:,0:self.RP_run_history.shape[1] - 3][start_location:train_size+start_location], 
+			self.RP_run_history.iloc[:,0:self.RP_run_history.shape[1] - 3][train_size + start_location:self.RP_run_history.shape[0]+1]), 
+			col_treatment='C', col_outcome='E', 
+			stratify=None, # No stratification as we need to match states in test set with Fourier
+			sklearn_model=RandomForestRegressor)
+		
+		# Random search over model parameters (3 folds * 50 iterations = 150 fits)
+		# eventual parameters are returned for documentation
+		up.randomized_search(
+			param_distributions={'max_depth': range(2,100), 'min_samples_split': range(2,1000)}, 
+			n_iter=50, n_jobs=10)
+
+		up.fit(**up.rand_search_.best_params_)
+
+
+		# x_test is
+		predictions = up.model.predict(up.x_test)		
+		decisions = [
+			*self.RP_run_history['C'][start_location:train_size+start_location].tolist(), # the random policy decisions in 'data collection' are also included for evaluation. 
+			*list(map(lambda p: 1 if p>tau else 0, predictions))]		
+		return decisions

@@ -13,7 +13,7 @@ class Fourier:
 		columns = []
 		for i in range(env.dim_count):
 			columns.append("x{}".format(i))
-		columns.extend(["C", "E", "optimal_cause"])
+		columns.extend(["C", "E", "E1", "E0", "optimal_cause"])
 
 		self.RP_run_history_cols = columns
 		self.RP_run_history = pd.DataFrame(columns=columns)
@@ -71,8 +71,10 @@ class Fourier:
 			# register state and Random Policy r
 			RP_C = np.random.binomial(1, .5)
 			RP_E = self.what_if_cause(s, RP_C)
+			E1 = self.what_if_cause(s, 1)
+			E0 = self.what_if_cause(s, 0)
 
-			RP_history.append([*s, RP_C, RP_E, s_cause])
+			RP_history.append([*s, RP_C, RP_E, E1, E0, s_cause])
 			
 			bandit_result = np.append(bandit_result, a)
 			optimal_result = np.append(optimal_result, s_cause)
