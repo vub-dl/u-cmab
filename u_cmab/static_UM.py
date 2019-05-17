@@ -58,7 +58,7 @@ class Static_UM:
 			
 			model_decisions[start_location:self.RP_run_history.shape[0] + 1] = decisions
 
-			start_location, _ = self.get_PH_location(decisions, start_of_section=start_location, train_size=static_dataset_size)
+			start_location, _ = self.get_PH_location(decisions, start_of_section=start_location, train_size=static_dataset_size, PH_alpha=PH_alpha)
 			print(start_location)
 
 		difference = np.array([])
