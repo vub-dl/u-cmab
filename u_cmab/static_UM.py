@@ -67,43 +67,7 @@ class Static_UM:
 		for i in range(len(model_decisions)):
 			difference = np.append(difference, abs(model_decisions[i] - optimal_decisions[i]))
 			static_id = np.append(static_id, np.average(difference[-window:]))
-				
-			"""	
-				PH_windowed_avg = 0
-				PH_total_avg = 0		
-				PH_value = np.array([0])
-				PH_total_avgs = np.array([0])
-				PH_windowed_avgs = np.array([0])
-				PH_N = 1						
-				for i in range(len(decisions[static_dataset_size:])):
-					if decisions[i + static_dataset_size] == 1:
-						PH_total_avg = (1 - 1/(PH_N)) * PH_total_avg + 1/(PH_N) * self.RP_run_history.iloc[i + static_dataset_size + start_location,:]["E1"]
-						PH_windowed_avg = (1 - PH_alpha) * PH_windowed_avg + PH_alpha * self.RP_run_history.iloc[i + static_dataset_size + start_location,:]["E1"]
-						
-						PH_value = np.append(PH_value, abs(PH_total_avg - PH_windowed_avg))
-						PH_windowed_avgs = np.append(PH_windowed_avgs, PH_windowed_avg)
-						PH_total_avgs = np.append(PH_total_avgs, PH_total_avg)
-
-						PH_N += 1
-					else:
-						PH_value = np.append(PH_value, PH_value[-1])
-						PH_windowed_avgs = np.append(PH_windowed_avgs, PH_windowed_avgs[-1])
-						PH_total_avgs = np.append(PH_total_avgs, PH_total_avgs[-1])
-
-					
-				stop_locations = np.where(PH_value[1:]>PH_lambda)[0] + static_dataset_size
-				if stop_locations.size == 0 or stop_locations[stop_locations>static_dataset_size + 1000].size == 0:
-					stop_location = self.RP_run_history.shape[0]
-				else:
-					stop_location = int(np.min(stop_locations[stop_locations>static_dataset_size + 1000]))
-
-				print(F"STOP AT {stop_location + start_location}")
-				end_decisions = np.append(end_decisions, decisions[0:stop_location])
-				s_ids = np.append(s_ids, static_id[0:stop_location])
-				PH_v = np.append(PH_v, PH_value[1:stop_location])
-				start_location += stop_location
-			"""
-
+			
 		# parameters can be consulted using up.rand_search_.best_params_
 		return up, static_id #, PH_v #, PH_total_avgs[1:], PH_windowed_avgs[1:], PH_value[1:]
 
