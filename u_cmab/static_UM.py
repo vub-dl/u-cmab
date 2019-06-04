@@ -21,7 +21,7 @@ class Static_UM:
 		"""
 		self.RP_run_history = RP_run_history
 	
-	def run(self, static_dataset_size=6000, total_experiment_count=14000, tau=.2, window=100, PH_alpha=.005, PH_init_length=200, PH_lambda=.1):
+	def run(self, static_dataset_size=6000, total_experiment_count=14000, tau=.2, window=100, PH_alpha=.005, PH_init_length=200, PH_lambda=.2):
 		if total_experiment_count > len(self.RP_run_history):
 			raise ValueError("Not enough experiments in Run History (RP_run_history) to accommodate {}".format(total_experiment_count))
 
@@ -58,7 +58,7 @@ class Static_UM:
 			
 			model_decisions[start_location:self.RP_run_history.shape[0] + 1] = decisions
 
-			start_location, _ = self.get_PH_location(decisions, start_of_section=start_location, train_size=static_dataset_size, PH_alpha=PH_alpha)
+			start_location, _ = self.get_PH_location(decisions, start_of_section=start_location, train_size=static_dataset_size, PH_alpha=PH_alpha, PH_lambda=PH_lambda)
 			print(start_location)
 
 		difference = np.array([])
