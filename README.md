@@ -23,5 +23,5 @@ After [installation](https://jupyter.readthedocs.io/en/latest/install.html), all
 ```shell
 jupyter notebook
 ```
-Every figure in the submitted paper corresponds with a notebook, provided at the root of this repository. Note that all notebooks are jupyter notebooks, with the exception of one Wolfram Mathematica notebook (`Figure~2.nb`).
+Every figure in the submitted paper corresponds with a notebook, provided at the root of this repository. Note that all notebooks are jupyter notebooks, with the exception of one Wolfram Mathematica notebook (`Figure~1.nb`).
 Due to the anonymisation process, notebooks are converted to `json`. When copying the notebooks, one can save a file as `ipynb` and open with jupyter notebook. For more information, visit [this guide](http://ipython.org/ipython-doc/rel-1.0.0/interactive/nbconvert.html)
