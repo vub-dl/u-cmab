@@ -193,3 +193,66 @@ def qini(ts, rs, u_hats, ups, treatment_names=['T=1'], urf_label=['Uplift Random
     ax.legend(prop=font)
 
     return ax
+
+
+# helpful plot methods
+def plot(t, r, u_hat, up, ax=None):
+    ue = UpliftEval(t, r, u_hat)
+
+    x, y = ue.calc('aqini')
+    x_stat, y_stat = up.test_results_.calc(plot_type='aqini', n_bins=20)
+    
+    if not ax:
+        fig, ax = plt.subplots()
+
+    ax.plot(x, y,'.-', color='dodgerblue', label='U-CMAB', markersize=13, linewidth=3)
+    ax.plot(x_stat, y_stat,'.-', color='firebrick', label='Random forest', markersize=13, linewidth=3)
+    ax.plot([0,1], [0, getattr(ue, 'aqini_y')[-1]], '--', color='black', label='Random selection', linewidth=3, dashes=(5,5), zorder=0)
+    
+    return make_cool_plot(ax)
+
+def plotter(t, r, u_hats, up, ax=None):
+    if not ax:
+        fig, ax = plt.subplots()
+    for i in range(len(u_hats)):
+        ue = UpliftEval(t[i], r[i], u_hats[i])
+        x, y = ue.calc('aqini')
+        x_stat, y_stat = up[i].test_results_.calc(plot_type='aqini', n_bins=20)
+        
+        ax.plot(x, y,'.-', color='dodgerblue', label='U-CMAB', markersize=13, linewidth=3, alpha=.2, zorder=1)
+        ax.plot(x_stat, y_stat,'.-', color='firebrick', label='Random forest', markersize=13, linewidth=3, alpha=.2, zorder=1)
+        ax.plot([0,1], [0, getattr(ue, 'aqini_y')[-1]], '--', color='black', label='Random selection', linewidth=3, dashes=(5,5), zorder=0, alpha=.2)
+    
+    return make_cool_plot(ax)
+            
+
+def make_cool_plot(ax):
+    ax.title.set_fontsize(30)
+    ax.title.set_text("Hillstrom dataset")
+    ax.title.set_fontfamily("sans-serif")
+    ax.xaxis.label.set_fontsize(30)
+    ax.xaxis.label.set_fontfamily("sans-serif")
+    ax.xaxis.label.set_text('Fraction of data')
+
+    ax.yaxis.label.set_fontsize(30)
+    ax.yaxis.label.set_fontfamily("sans-serif")
+    ax.yaxis.label.set_text('Uplift')
+
+    ax.set_yticks([0, .04])
+    ax.set_xticks([0, .5, 1])
+
+    ax.xaxis.set_tick_params(labelsize=30)
+    ax.yaxis.set_tick_params(labelsize=30)
+
+    ax.figure.set_size_inches(13.5, 10.5)
+    for l in ax.get_lines():
+        if  l.get_label() == 'Random selection':
+            l.set_linewidth(3)
+            l.set_color('black')
+            l.set_zorder(0)
+            l.set_dashes((5,5))
+
+    font = fm.FontProperties(family='sans-serif', size=23)
+    #ax.legend(prop=font)
+
+    return ax
