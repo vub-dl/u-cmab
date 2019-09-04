@@ -1,4 +1,4 @@
-# A bandit approach to individual-treatment-effect estimation - code
+# Individual-Treatment-Effect Optimisation Using Bandits - code
 ## Overview
 Code is split in simulation code, found in the folder `simulation-code` and code for the experiments, found in the folder `u-cmab`.
 
