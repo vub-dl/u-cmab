@@ -1,5 +1,6 @@
 from abc import ABC, abstractmethod
 from numpy.linalg import inv
+import numpy as np
 
 class MAB(ABC):
     
@@ -19,7 +20,7 @@ class MAB(ABC):
     @abstractmethod
     def update(self, arm, reward, context):
         # get the chosen arm
-        self.arm = arm
+        self.arm = arm 
         # get the context (may be None)
         self.context = context
         # update the overall step of the model
@@ -33,7 +34,7 @@ class MAB(ABC):
         pass
 
 
-def offlineEvaluate(mab, rewards, contexts, nrounds=None):
+def offlineEvaluate(mab, rewards, contexts, tau, nrounds=None, u_cmab=1):
     # array to contain chosen arms in offline mode
     chosen_arms = np.zeros(nrounds)
     # rewards of each chosen arm
@@ -58,9 +59,9 @@ def offlineEvaluate(mab, rewards, contexts, nrounds=None):
             # append the current context of chosen arm to the previous history (list)
             history.append(contexts[i,:])
             # get the reward of chosen arm at round T
-            reward_arms[T] = rewards[i][action] - action * tau
+            reward_arms[T] = rewards[i][action] - action * tau * u_cmab
             # the returned action is between 1-10, setting to python encoding ==> 0-9
-            mab.update(action, rewards[i][action], contexts[i,:])
+            mab.update(action, rewards[i][action] - action * tau * u_cmab, contexts[i,:])
             # update overall cumulative reward
             G += rewards[i][action]
             # update cumulative reward of round T 
