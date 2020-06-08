@@ -1,4 +1,4 @@
-# Agent Based Individual-Treatment-Effect Optimisation - code
+# Individual-treatment-effect optimisation in dynamic environments
 ## Overview
 Code is split in simulation code, found in the folder `simulation-code` and code for the experiments, found in the folder `u-cmab`.
 
